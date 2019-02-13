@@ -1,17 +1,23 @@
 #divEsquerda {
+  float: left;
   width: 50%;
-  height: 1000px;
-  border: black;
+  border-right: black;
+  border-top: white;
+  border-left: white;
+  border-bottom: white;
   border-width: 1px;
   border-style: solid;
 }
 
 #divDireita {
-    width: 50%;
-    height: 1000px;
-    background-color: rgb(228, 223, 223)  ;
-  }
+  padding: 10px;
+  float: right;
+}
 
+#menu {
+  width: 100%;
+  height: 50px;
+}
   #conteudo {
       padding: 10px;
   }

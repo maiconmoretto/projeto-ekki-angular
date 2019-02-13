@@ -1,0 +1,30 @@
+<div class="container">
+    <h1>Trasferência</h1>
+
+    <div class="form-group">
+        <label for="conta">Conta</label>
+        <input #box (keyup)="onContaKeyUp($event)"  (blur)="trasnferir(box.value)" type="text" class="form-control" id="conta" required>
+    </div>
+
+    <div class="form-group" >
+        <label for="valor">Valor</label>
+        <input (keyup)="onValorKeyUp($event)" type="text" class="form-control" id="valor">
+    </div>
+
+
+<!-- 
+    <button type="button" class="btn btn-default" (click)="trasnferir()">Novo Contato</button>
+
+    <button type="button" class="btn btn-default" (click)="delete()">Deletar Contato</button>
+
+    <button type="button" class="btn btn-default" (click)="update()">Atualizar Contato</button> -->
+
+</div>
+<h2>Histórico de Trasferência</h2>
+
+<ul>
+    <li *ngFor="let rs of res">
+        <input value="{{rs.idUsuario}}" type="text" class="form-control" id="idUsuario" required>
+        {{rs.id}} - {{rs.idUsuario}}
+    </li>
+</ul>
