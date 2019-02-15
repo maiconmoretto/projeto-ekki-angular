@@ -4,6 +4,8 @@ import { SaldoService } from '../saldo.service';
 import { ContaService } from '../conta.service';
 import { Usuario } from '../usuario';
 import { UsuarioService } from '../usuario.service';
+import { HistoricoTransferenciaService } from '../historico-transferencia.service';
+import { HistoricoTransferencia } from '../historico-transferencia';
 
 @Component({
   selector: 'app-transferencia',
@@ -24,9 +26,11 @@ export class TransferenciaComponent implements OnInit {
   dadosDestinatario;
   saldoDestinatario;
   saldoSolicitante;
+  modelHistorico;
   constructor(private saldoService: SaldoService,
     private contaService: ContaService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private historicoTransferenciaService: HistoricoTransferenciaService
   ) { }
 
   ngOnInit() {
@@ -75,8 +79,23 @@ export class TransferenciaComponent implements OnInit {
     }
     this.removeSaldoSolicitante();
     this.adicionaSaldoDestinatario();
+
+    this.salvaHistoricoTransferencia();
+
     alert('transferencia efetuada!')
   }
+
+  salvaHistoricoTransferencia() {
+    this.modelHistorico = new HistoricoTransferencia(
+      null,
+      this.usuarioService.buscaIdUsuario(),
+      this.dadosConta[0].idUsuario,
+      null,
+      this.valor
+      );
+    this.historicoTransferenciaService.criar(this.modelHistorico);
+  }
+  
 
   validaSaldoSuficiente() {
     if (Number(this.valor) > Number(this.usuarioService.buscaSaldoUsuario())) {

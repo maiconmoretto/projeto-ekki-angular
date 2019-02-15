@@ -17,7 +17,6 @@ export class SaldoService {
 
   listar(idusuario) {
     return this.http.get(this.saldosUrl + '/' + idusuario);
-    //this.http.get<any[]>(`${this.saldosUrl}`);
   }
 
   update(model: any) {

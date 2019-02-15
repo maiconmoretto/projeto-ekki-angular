@@ -9,12 +9,14 @@ import { SaldosListagemComponent } from './saldos-listagem/saldos-listagem.compo
 import { SaldoService } from './saldo.service';
 import { from } from 'rxjs';
 import { TransferenciaComponent } from './transferencia/transferencia.component';
+import { HistoricoTransferenciaComponent } from './historico-transferencia/historico-transferencia.component';
 
 
 
 
 const appRoutes: Routes = [
   { path: 'transferencia', component: TransferenciaComponent },
+  { path: 'historicoTransferencia', component: HistoricoTransferenciaComponent },
  ];
 
 
@@ -22,7 +24,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     SaldosListagemComponent,
-    TransferenciaComponent
+    TransferenciaComponent,
+    HistoricoTransferenciaComponent
   ],
   imports: [
     RouterModule.forRoot(
