@@ -8,13 +8,22 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class ContaService {
-  contaUrl = 'http://localhost:8080/api/conta';
+export class UsuarioService {
+
+  usuarioUrl = 'http://localhost:8080/api/usuarios';
+  idUsuario = 1;
 
   constructor(private http: HttpClient) { }
 
-  listarDadosPorNumeroConta(numeroConta) {
-    console.log(' conta '+ numeroConta);
-    return this.http.get(this.contaUrl + '/dados/' + numeroConta);
+  buscaIdUsuario() {
+    return this.idUsuario;
+  }
+
+  buscaSaldoUsuario() {
+    return 100;
+  }
+
+  listarUsuarioPorId(idUsuario) {
+    return this.http.get(this.usuarioUrl + '/' + idUsuario);
   }
 }

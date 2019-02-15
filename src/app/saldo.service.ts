@@ -11,16 +11,16 @@ const httpOptions = {
 })
 export class SaldoService {
 
-  saldosUrl = 'http://localhost:8080/api/saldos/1';
+  saldosUrl = 'http://localhost:8080/api/saldos';
 
   constructor(private http: HttpClient) { }
 
-  listar() {
-    return this.http.get(this.saldosUrl);
+  listar(idusuario) {
+    return this.http.get(this.saldosUrl + '/' + idusuario);
     //this.http.get<any[]>(`${this.saldosUrl}`);
   }
 
   update(model: any) {
-    this.http.put( 'http://localhost:8080/api/saldos/update/1',model, httpOptions).subscribe(data=> console.log(data),err=>{console.log("error")})
+    this.http.put( this.saldosUrl + '/update/' + model.idusuario  ,model, httpOptions).subscribe(data=> console.log(data),err=>{console.log("error")})
   }
 }
