@@ -22,7 +22,7 @@ export class TransferenciaComponent implements OnInit {
   //get diagnostic() { return JSON.stringify(this.model); }
   conta: string = '';
   valor: string = '';
-  dadosConta;
+  dadosContaDestinatario;
   dadosDestinatario;
   saldoDestinatario;
   saldoSolicitante;
@@ -54,13 +54,13 @@ export class TransferenciaComponent implements OnInit {
   buscaUsuarioPorConta() {
     /*    console.log(this.contaService.listarDadosPorNumeroConta(this.conta)); */
     this.contaService.listarDadosPorNumeroConta(this.conta).subscribe(dados => {
-      this.dadosConta = dados;
+      this.dadosContaDestinatario = dados;
       console.log('data', dados);
       if (Object.keys(dados).length == 0) {
         alert('nao existe usuário com está conta!');
       } else {
         document.getElementById('confirmacao-dados').style.display = "block";
-        this.usuarioService.listarUsuarioPorId(this.dadosConta[0].idUsuario).subscribe(dados => {
+        this.usuarioService.listarUsuarioPorId(this.dadosContaDestinatario[0].idUsuario).subscribe(dados => {
           this.dadosDestinatario = dados;
           console.log('data', dados);
           if (Object.keys(dados).length == 0) {
@@ -89,9 +89,11 @@ export class TransferenciaComponent implements OnInit {
     this.modelHistorico = new HistoricoTransferencia(
       null,
       this.usuarioService.buscaIdUsuario(),
-      this.dadosConta[0].idUsuario,
+      this.dadosContaDestinatario[0].idUsuario,
       null,
-      this.valor
+      this.valor,
+      this.dadosDestinatario[0].nome,
+      this.dadosContaDestinatario[0].numeroConta
       );
     this.historicoTransferenciaService.criar(this.modelHistorico);
   }
@@ -106,7 +108,7 @@ export class TransferenciaComponent implements OnInit {
   }
 
   adicionaSaldoDestinatario() {
-    let idDestinatario = this.dadosConta[0].idUsuario;
+    let idDestinatario = this.dadosContaDestinatario[0].idUsuario;
     this.saldoService.listar(idDestinatario).subscribe(dados => {
       this.saldoDestinatario = dados;
 

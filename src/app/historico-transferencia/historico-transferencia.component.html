@@ -1,8 +1,18 @@
-<ul>
-  <li *ngFor="let historicoTransferencia of historicoTransferencias">
-  destinatário:   {{historicoTransferencia.idDestinatario}} ,
-  data cadastro:  {{historicoTransferencia.dataCadastro}},
-  valor: R$ {{historicoTransferencia.valor}},
-  </li>
-</ul>
-
+<div class="container" id="paddingGeral">
+  <h2>Histórico de transferências</h2>
+  <hr>
+  <table style="width:100%">
+    <tr>
+      <th>Destinatário</th>
+      <th>Conta</th>
+      <th>Data</th>
+      <th>Valor</th>
+    </tr>
+    <tr *ngFor="let historicoTransferencia of historicoTransferencias"> 
+      <td> {{historicoTransferencia.nomeDestinatario}} </td>
+      <td> {{historicoTransferencia.numeroConta}} </td>
+      <td> {{historicoTransferencia.dataCadastro}} </td>
+      <td> R$ {{historicoTransferencia.valor}} </td>
+    </tr>
+  </table>
+</div>
