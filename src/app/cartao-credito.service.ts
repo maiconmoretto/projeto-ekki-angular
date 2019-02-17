@@ -12,15 +12,19 @@ const httpOptions = {
 export class CartaoCreditoService {
 
   cartaoCreditoUrl = 'http://localhost:8080/api/cartaoCredito';
-  
+
   constructor(private http: HttpClient) { }
 
   listar(idusuario) {
     return this.http.get(this.cartaoCreditoUrl + '/' + idusuario);
   }
 
-  update(model: any) {
+  atualizar(model: any) {
     this.http.put( this.cartaoCreditoUrl + '/update/' + model.idusuario  ,model, httpOptions)
     .subscribe(data=> console.log(data),err=>{console.log("error")})
+  }
+
+  criar(model: any) {
+    this.http.post( this.cartaoCreditoUrl + '/create'  ,model, httpOptions).subscribe(data=> console.log(data),err=>{console.log("error")})
   }
 }

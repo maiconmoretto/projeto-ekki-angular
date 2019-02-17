@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CartaoCredito  } from '../cartao-credito';
+import { CartaoCredito } from '../cartao-credito';
 import { CartaoCreditoService } from '../cartao-credito.service';
+import { UsuarioService } from '../usuario.service';
 
 @Component({
   selector: 'app-cartao-credito',
@@ -8,26 +9,51 @@ import { CartaoCreditoService } from '../cartao-credito.service';
   styleUrls: ['./cartao-credito.component.css']
 })
 export class CartaoCreditoComponent implements OnInit {
+  model;
+  constructor(private cartaoCreditoService: CartaoCreditoService,
+    private usuarioService: UsuarioService) { }
 
-  constructor(private cartaoCreditoService: CartaoCreditoService) { }
   validadeCartao;
-  cartoes = [{
-    "codigoSeguranca": 123,
-    "numeroCartao": 321,
-    "nomeUsuario": "maicon moretto",
-    "validade": "01/01/2018"
-  }]; 
+  nomeUsuarioCartao;
+  numeroCartao;
+  codigoSeguranca;
+
+  cartoes;
+
   ngOnInit() {
+    this.listar();
   }
 
+  listar() {
+    this.cartaoCreditoService.listar(this.usuarioService.buscaIdUsuario()).subscribe(dados => this.cartoes = dados );
+  }
 
   onValidadeCartaoKeyUp(event: any) {
     this.validadeCartao = event.target.value;
-    console.log(this.validadeCartao);
+  }
+
+  onNomeUsuarioCartaoKeyUp(event: any) {
+    this.nomeUsuarioCartao = event.target.value;
+  }
+
+  onNumeroCartaoKeyUp(event: any) {
+    this.numeroCartao = event.target.value;
+  }
+
+  onCodigoSegurancaKeyUp(event: any) {
+    this.codigoSeguranca = event.target.value;
   }
 
   salvar() {
-    
+    this.model = new CartaoCredito(
+      null, 
+      this.usuarioService.buscaIdUsuario(),
+      this.validadeCartao,
+      this.nomeUsuarioCartao,
+      this.numeroCartao, 
+      this.codigoSeguranca
+    );
+    this.cartaoCreditoService.criar(this.model);
   }
 
 }

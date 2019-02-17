@@ -1,9 +1,9 @@
 export class CartaoCredito {
         constructor(
         public id: number,
-        public idusuario: number,
+        public idUsuario: number,
         public validadeCartao: string,
-        public nomeUsurioCartao: string,
+        public nomeUsuarioCartao: string,
         public numeroCartao: string,
         public codigoSeguranca: number
         ) {  }
