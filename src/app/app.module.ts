@@ -10,6 +10,7 @@ import { SaldoService } from './saldo.service';
 import { from } from 'rxjs';
 import { TransferenciaComponent } from './transferencia/transferencia.component';
 import { HistoricoTransferenciaComponent } from './historico-transferencia/historico-transferencia.component';
+import { CartaoCreditoComponent } from './cartao-credito/cartao-credito.component';
 
 
 
@@ -17,6 +18,7 @@ import { HistoricoTransferenciaComponent } from './historico-transferencia/histo
 const appRoutes: Routes = [
   { path: 'transferencia', component: TransferenciaComponent },
   { path: 'historicoTransferencia', component: HistoricoTransferenciaComponent },
+  { path: 'cartaoCredito', component: CartaoCreditoComponent },
  ];
 
 
@@ -25,7 +27,8 @@ const appRoutes: Routes = [
     AppComponent,
     SaldosListagemComponent,
     TransferenciaComponent,
-    HistoricoTransferenciaComponent
+    HistoricoTransferenciaComponent,
+    CartaoCreditoComponent
   ],
   imports: [
     RouterModule.forRoot(
