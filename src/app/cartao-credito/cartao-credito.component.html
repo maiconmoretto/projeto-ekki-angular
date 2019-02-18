@@ -1,6 +1,6 @@
 <div class="container" id="paddingGeral">
   <h1>Registro Cartão de Crédito</h1>
-
+  <input type="id" value="" id="id" hidden>
   <hr>
   <div class="form-group">
     <label for="validadeCartao">Validade</label>
@@ -12,11 +12,11 @@
   </div>
   <div class="form-group">
     <label for="numeroCartao">Número </label>
-    <input (keyup)="onNumeroCartaoKeyUp($event)" type="text" class="form-control" id="numeroCartao" required>
+    <input (keyup)="onNumeroCartaoKeyUp($event)" type="number" class="form-control" id="numeroCartao" required>
   </div>
   <div class="form-group">
-    <label for="codigoSeguranca">Código de  segurança</label>
-    <input (keyup)="onCodigoSegurancaKeyUp($event)" type="text" class="form-control" id="codigoSeguranca" required>
+    <label for="codigoSeguranca">Código de segurança</label>
+    <input (keyup)="onCodigoSegurancaKeyUp($event)" type="number" class="form-control" id="codigoSeguranca" required>
   </div>
   <button type="button" class="btn btn-default" (click)="salvar()">salvar</button>
 
@@ -31,16 +31,15 @@
       <th>#</th>
     </tr>
     <tr *ngFor="let cartao of cartoes">
-      <td> {{cartao.codigoSeguranca}} </td>
-      <td> {{cartao.numeroCartao}} </td>
-      <td> {{cartao.nomeUsuarioCartao}} </td>
-      <td> {{cartao.validadeCartao}} </td>
+      <td (click)="carregaCamposEditarFormulario(cartao)"> {{cartao.codigoSeguranca}} </td>
+      <td (click)="carregaCamposEditarFormulario(cartao)"> {{cartao.numeroCartao}} </td>
+      <td (click)="carregaCamposEditarFormulario(cartao)"> {{cartao.nomeUsuarioCartao}} </td>
+      <td (click)="carregaCamposEditarFormulario(cartao)"> {{cartao.validadeCartao}} </td>
       <td>
-        <a href="#" class="btn btn-danger btn-lg">
-          <span class="glyphicon glyphicon-trash"></span>  
-        </a>
+        <button type="button" class="btn btn-default" (click)="deletar(cartao)"><span
+            class="glyphicon glyphicon-trash"></span> </button>
       </td>
-     
+
     </tr>
   </table>
 </div>
