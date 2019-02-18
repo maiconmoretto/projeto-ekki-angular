@@ -11,6 +11,7 @@ import { from } from 'rxjs';
 import { TransferenciaComponent } from './transferencia/transferencia.component';
 import { HistoricoTransferenciaComponent } from './historico-transferencia/historico-transferencia.component';
 import { CartaoCreditoComponent } from './cartao-credito/cartao-credito.component';
+import { ContatoComponent } from './contato/contato.component';
 
 
 
@@ -19,6 +20,7 @@ const appRoutes: Routes = [
   { path: 'transferencia', component: TransferenciaComponent },
   { path: 'historicoTransferencia', component: HistoricoTransferenciaComponent },
   { path: 'cartaoCredito', component: CartaoCreditoComponent },
+  { path: 'contato', component: ContatoComponent },
  ];
 
 
@@ -28,7 +30,8 @@ const appRoutes: Routes = [
     SaldosListagemComponent,
     TransferenciaComponent,
     HistoricoTransferenciaComponent,
-    CartaoCreditoComponent
+    CartaoCreditoComponent,
+    ContatoComponent
   ],
   imports: [
     RouterModule.forRoot(

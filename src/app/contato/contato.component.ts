@@ -1,68 +1,57 @@
 import { Component, OnInit } from '@angular/core';
-import { CartaoCredito } from '../cartao-credito';
-import { CartaoCreditoService } from '../cartao-credito.service';
+import { Contato } from '../contato';
+import { ContatoService } from '../contato.service';
 import { UsuarioService } from '../usuario.service';
 
 @Component({
-  selector: 'app-cartao-credito',
-  templateUrl: './cartao-credito.component.html',
-  styleUrls: ['./cartao-credito.component.css']
+  selector: 'app-contato',
+  templateUrl: './contato.component.html',
+  styleUrls: ['./contato.component.css']
 })
-export class CartaoCreditoComponent implements OnInit {
-  model;
+export class ContatoComponent implements OnInit {
+
   constructor(
-    private cartaoCreditoService: CartaoCreditoService,
+    private contatoService: ContatoService,
     private usuarioService: UsuarioService
-    ) { }
+  ) { }
 
-  validadeCartao;
-  nomeUsuarioCartao;
-  numeroCartao;
-  codigoSeguranca;
-
-  cartoes: Array<any>;
-
+  contatos: Array<any>;
+  conta;
+  nome;
   ngOnInit() {
     this.listar();
   }
 
   listar() {
-    this.cartaoCreditoService.listar(this.usuarioService.buscaIdUsuario()).subscribe(dados => this.cartoes = dados);
+    this.contatoService.listar(this.usuarioService.buscaIdUsuario()).subscribe(dados => this.contatos = dados);
   }
 
-  onValidadeCartaoKeyUp(event: any) {
-    this.validadeCartao = event.target.value;
+  onNomeKeyUp(event: any) {
+    this.nome = event.target.value;
   }
 
-  onNomeUsuarioCartaoKeyUp(event: any) {
-    this.nomeUsuarioCartao = event.target.value;
+  onContaKeyUp(event: any) {
+    this.conta = event.target.value;
   }
 
-  onNumeroCartaoKeyUp(event: any) {
-    this.numeroCartao = event.target.value;
-  }
-
-  onCodigoSegurancaKeyUp(event: any) {
-    this.codigoSeguranca = event.target.value;
-  }
 
   salvar() {
     let id = document.getElementById("id").value;
-   
+
     if (id) {
-      this.model = new CartaoCredito(
+      this.model = new Contato(
         id,
         this.usuarioService.buscaIdUsuario(),
-        document.getElementById('validadeCartao').value ,
-        document.getElementById('nomeUsuarioCartao').value ,
-        document.getElementById('numeroCartao').value ,
-        document.getElementById('codigoSeguranca').value 
+        document.getElementById('validadeCartao').value,
+        document.getElementById('nomeUsuarioCartao').value,
+        document.getElementById('numeroCartao').value,
+        document.getElementById('codigoSeguranca').value
       );
       this.cartaoCreditoService.atualizar(this.model);
       alert('Cartão autalizado com sucesso!');
       window.location.reload();
     } else {
-      this.model = new CartaoCredito(
+      this.model = new Contato(
         null,
         this.usuarioService.buscaIdUsuario(),
         this.validadeCartao,
@@ -76,8 +65,8 @@ export class CartaoCreditoComponent implements OnInit {
     }
   }
 
-  carregaCamposEditarFormulario(cartao: any) {
-    this.preencheCamposEditar(cartao);
+  carregaCamposEditarFormulario(contato: any) {
+    this.preencheCamposEditar(contato);
   }
 
   preencheCamposEditar(cartao: any) {
@@ -95,4 +84,5 @@ export class CartaoCreditoComponent implements OnInit {
       window.location.reload();
     }
   }
+
 }
