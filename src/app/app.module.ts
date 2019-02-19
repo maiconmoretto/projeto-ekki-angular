@@ -21,6 +21,7 @@ const appRoutes: Routes = [
   { path: 'historicoTransferencia', component: HistoricoTransferenciaComponent },
   { path: 'cartaoCredito', component: CartaoCreditoComponent },
   { path: 'contato', component: ContatoComponent },
+  { path: 'saldo', component: SaldosListagemComponent },
  ];
 
 
