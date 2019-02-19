@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Contato } from '../contato';
 import { ContatoService } from '../contato.service';
 import { UsuarioService } from '../usuario.service';
+import { ContaService } from '../conta.service';
 
 @Component({
   selector: 'app-contato',
@@ -12,18 +13,18 @@ export class ContatoComponent implements OnInit {
 
   constructor(
     private contatoService: ContatoService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private contaService: ContaService,
   ) { }
 
   contatos: Array<any>;
   conta;
   nome;
+  model;
+  dadosContaDestinatario;
+
   ngOnInit() {
     this.listar();
-  }
-
-  listar() {
-    this.contatoService.listar(this.usuarioService.buscaIdUsuario()).subscribe(dados => this.contatos = dados);
   }
 
   onNomeKeyUp(event: any) {
@@ -34,7 +35,19 @@ export class ContatoComponent implements OnInit {
     this.conta = event.target.value;
   }
 
+  listar() {
+    this.contatoService.listar(this.usuarioService.buscaIdUsuario()).subscribe(dados => this.contatos = dados);
+  }
 
+  buscaUsuarioPorConta() {
+    this.contaService.listarDadosPorNumeroConta(this.conta).subscribe(dados => {
+      this.dadosContaDestinatario = dados;
+      console.log('data', dados);
+      if (Object.keys(dados).length == 0) {
+        alert('nao existe usuário com está conta!');
+      }
+    });
+  }
   salvar() {
     let id = document.getElementById("id").value;
 
@@ -42,25 +55,24 @@ export class ContatoComponent implements OnInit {
       this.model = new Contato(
         id,
         this.usuarioService.buscaIdUsuario(),
-        document.getElementById('validadeCartao').value,
-        document.getElementById('nomeUsuarioCartao').value,
-        document.getElementById('numeroCartao').value,
-        document.getElementById('codigoSeguranca').value
+        this.dadosContaDestinatario[0].idUsuario,
+        this.nome,
+        this.conta
       );
-      this.cartaoCreditoService.atualizar(this.model);
-      alert('Cartão autalizado com sucesso!');
+      this.contatoService.atualizar(this.model);
+      alert('Contato autalizado com sucesso!');
       window.location.reload();
     } else {
       this.model = new Contato(
         null,
         this.usuarioService.buscaIdUsuario(),
-        this.validadeCartao,
-        this.nomeUsuarioCartao,
-        this.numeroCartao,
-        this.codigoSeguranca
+        this.dadosContaDestinatario[0].idUsuario,
+        this.nome,
+        this.conta
       );
-      this.cartaoCreditoService.criar(this.model);
-      alert('Cartão salvo com sucesso!');
+      console.log(this.model)
+      this.contatoService.criar(this.model);
+      alert('Contato salvo com sucesso!');
       window.location.reload();
     }
   }
@@ -69,18 +81,16 @@ export class ContatoComponent implements OnInit {
     this.preencheCamposEditar(contato);
   }
 
-  preencheCamposEditar(cartao: any) {
-    document.getElementById('validadeCartao').value = cartao.validadeCartao;
-    document.getElementById('nomeUsuarioCartao').value = cartao.nomeUsuarioCartao;
-    document.getElementById('numeroCartao').value = cartao.numeroCartao;
-    document.getElementById('codigoSeguranca').value = cartao.codigoSeguranca;
-    document.getElementById("id").value = cartao.id;
+  preencheCamposEditar(contato: any) {
+    document.getElementById('nome').value = contato.nomeContato;
+    document.getElementById('conta').value = contato.numeroConta;
+    document.getElementById("id").value = contato.id;
   }
 
-  deletar(cartao: any) {
-    if (confirm("Tem certeza que deseja deletar o cartão?")) {
-      this.cartaoCreditoService.deletar(cartao.id);
-      alert('Cartão de crédito deletado com sucesso!');
+  deletar(contato: any) {
+    if (confirm("Tem certeza que deseja deletar o Contato?")) {
+      this.contatoService.deletar(contato.id);
+      alert('Contato deletado com sucesso!');
       window.location.reload();
     }
   }

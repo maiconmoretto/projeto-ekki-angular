@@ -16,19 +16,19 @@ contatoUrl = 'http://localhost:8080/api/contato';
 
   
   listar(idusuario) {
-    return this.http.get<any[]>(this.cartaoCreditoUrl + '/' + idusuario);
+    return this.http.get<any[]>(this.contatoUrl + '/' + idusuario);
   }
 
   atualizar(model: any) {
-    this.http.put( this.cartaoCreditoUrl + '/update/' + model.id  ,model, httpOptions)
+    this.http.put( this.contatoUrl + '/update/' + model.id  ,model, httpOptions)
     .subscribe(data=> console.log(data),err=>{console.log("error")})
   }
 
   criar(model: any) {
-    this.http.post( this.cartaoCreditoUrl + '/create'  ,model, httpOptions).subscribe(data=> console.log(data),err=>{console.log("error")})
+    this.http.post( this.contatoUrl + '/create'  ,model, httpOptions).subscribe(data=> console.log(data),err=>{console.log("error")})
   }
 
   deletar(id: number) {
-    this.http.delete( this.cartaoCreditoUrl + '/delete/' +id, httpOptions).subscribe(data=> console.log(data),err=>{console.log("error")})
+    this.http.delete( this.contatoUrl + '/delete/' +id, httpOptions).subscribe(data=> console.log(data),err=>{console.log("error")})
   }
 }

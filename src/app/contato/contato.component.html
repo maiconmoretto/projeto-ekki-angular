@@ -1,35 +1,36 @@
 <div class="container" id="paddingGeral">
-    <h1>Registro Contato</h1>
-    <input type="id" value="" id="id" hidden>
-    <hr>
-  
-    <div class="form-group">
-      <label for="nome">Nome</label>
-      <input (keyup)="onNomeKeyUp($event)" type="text" class="form-control" id="nome" required>
-    </div>
-    <div class="form-group">
-      <label for="conta">Conta </label>
-      <input (keyup)="onContaKeyUp($event)" type="number" class="form-control" id="conta" required>
-    </div>
+  <h1>Registro Contato</h1>
+  <input type="id" value="" id="id" hidden>
+  <input type="idContato" value="" id="idContato" hidden>
+  <hr>
 
-    <button type="button" class="btn btn-default" (click)="salvar()">salvar</button>
-  
-    <hr>
-    <h2>Contatos cadastrados</h2>
-    <table style="width:100%">
-      <tr>
-        <th>Nome</th>
-        <th>Conta</th>      
-        <th>#</th>
-      </tr>
-      <tr *ngFor="let contato of contatos">
-        <td (click)="carregaCamposEditarFormulario(contato)"> {{contato.cadastradoPor}} </td>
-        <td (click)="carregaCamposEditarFormulario(contato)"> {{contato.idUsuarioContato}} </td>
-        <td>
-          <button type="button" class="btn btn-default" (click)="deletar(contato)"><span
-              class="glyphicon glyphicon-trash"></span> </button>
-        </td>
-  
-      </tr>
-    </table>
+
+  <div class="form-group">
+    <label for="conta">Conta </label>
+    <input (keyup)="onContaKeyUp($event)" (blur)="buscaUsuarioPorConta()" type="number" class="form-control" id="conta" required>
   </div>
+  <div class="form-group">
+    <label for="nome">Nome</label>
+    <input (keyup)="onNomeKeyUp($event)" type="text" class="form-control" id="nome" required>
+  </div>
+  <button type="button" class="btn btn-default" (click)="salvar()">salvar</button>
+
+  <hr>
+  <h2>Contatos cadastrados</h2>
+  <table style="width:100%">
+    <tr>
+      <th>Conta</th>
+      <th>Nome</th>
+      <th>#</th>
+    </tr>
+    <tr *ngFor="let contato of contatos">
+      <td (click)="carregaCamposEditarFormulario(contato)"> {{contato.nomeContato}} </td>
+      <td (click)="carregaCamposEditarFormulario(contato)"> {{contato.numeroConta}} </td>
+      <td>
+        <button type="button" class="btn btn-default" (click)="deletar(contato)"><span
+            class="glyphicon glyphicon-trash"></span> </button>
+      </td>
+
+    </tr>
+  </table>
+</div>
