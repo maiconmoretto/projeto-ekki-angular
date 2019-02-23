@@ -23,6 +23,7 @@ export class TransferenciaComponent implements OnInit {
   saldoDestinatario;
   saldoSolicitante;
   modelHistorico;
+
   constructor(private saldoService: SaldoService,
     private contaService: ContaService,
     private usuarioService: UsuarioService,
@@ -43,14 +44,12 @@ export class TransferenciaComponent implements OnInit {
   buscaUsuarioPorConta() {
     this.contaService.listarDadosPorNumeroConta(this.conta).subscribe(dados => {
       this.dadosContaDestinatario = dados;
-      console.log('data', dados);
       if (Object.keys(dados).length == 0) {
         alert('nao existe usuário com está conta!');
       } else {
         document.getElementById('confirmacao-dados').style.display = "block";
         this.usuarioService.listarUsuarioPorId(this.dadosContaDestinatario[0].idUsuario).subscribe(dados => {
           this.dadosDestinatario = dados;
-          console.log('data', dados);
           if (Object.keys(dados).length == 0) {
             alert('nao existe usuário com este id!');
           }
@@ -61,16 +60,37 @@ export class TransferenciaComponent implements OnInit {
   }
 
   transferir() {
-    if (!this.validaSaldoSuficiente()) {
-      alert('saldo insuficiente');
-      return false;
-    }
-    this.removeSaldoSolicitante();
-    this.adicionaSaldoDestinatario();
+    this.saldoService.listar(this.usuarioService.buscaIdUsuario()).subscribe(dados => {
+      this.saldoSolicitante = dados;
+      this.saldoSolicitante = dados[0].saldo;
+      if (Number(this.valor) > Number(this.saldoSolicitante)) {
+        let msg = "saldo insuficiente! \n saldo= " + this.saldoSolicitante + ", valor a ser transferido= " + this.valor;
+        msg += "\n Será utilizado o cartão de crédito."
+        alert(msg);
+        return;
+      } else if (Number(this.valor) > 1000) {
+        let senha = prompt("Por favor digite a senha");
+        if (senha == null) {
+          alert('digite a senha!');
+          return;
+        }
+        if (senha != 123) {
+          alert('senha errada!');
+          return;
+        }
+        this.removeSaldoSolicitante();
+        this.adicionaSaldoDestinatario();
+        this.salvaHistoricoTransferencia();
+        alert('transferencia efetuada!');
+      }
+    })
 
-    this.salvaHistoricoTransferencia();
+  }
 
-    alert('transferencia efetuada!')
+  removeSaldoSolicitante() {
+    let valorAtualizadoSolicitante = Number(this.saldoSolicitante) - Number(this.valor);
+    this.model = new Saldo(null, valorAtualizadoSolicitante, this.usuarioService.buscaIdUsuario());
+    this.saldoService.update(this.model);
   }
 
   salvaHistoricoTransferencia() {
@@ -82,18 +102,10 @@ export class TransferenciaComponent implements OnInit {
       this.valor,
       this.dadosDestinatario[0].nome,
       this.dadosContaDestinatario[0].numeroConta
-      );
+    );
     this.historicoTransferenciaService.criar(this.modelHistorico);
   }
-  
 
-  validaSaldoSuficiente() {
-    if (Number(this.valor) > Number(this.usuarioService.buscaSaldoUsuario())) {
-      return false;
-    } else {
-      return true;
-    }
-  }
 
   adicionaSaldoDestinatario() {
     let idDestinatario = this.dadosContaDestinatario[0].idUsuario;
@@ -105,19 +117,5 @@ export class TransferenciaComponent implements OnInit {
       this.model = new Saldo(null, valorAtualizadoDestinatario, idDestinatario);
       this.saldoService.update(this.model);
     });
-  }
-
-  removeSaldoSolicitante() {
-    this.saldoService.listar(this.usuarioService.buscaIdUsuario()).subscribe(dados => {
-      this.saldoSolicitante = dados;
-      let saldoSolicitante = dados[0].saldo;
-      if (Number(this.valor) > Number(saldoSolicitante)) {
-        alert('saldo insuficiente');
-        return false;
-      }
-      let valorAtualizadoSolicitante = Number(saldoSolicitante) - Number(this.valor);
-      this.model = new Saldo(null, valorAtualizadoSolicitante, this.usuarioService.buscaIdUsuario());
-      this.saldoService.update(this.model);
-    })
   }
 }
