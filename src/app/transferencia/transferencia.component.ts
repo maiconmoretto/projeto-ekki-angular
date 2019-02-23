@@ -5,6 +5,7 @@ import { ContaService } from '../conta.service';
 import { UsuarioService } from '../usuario.service';
 import { HistoricoTransferenciaService } from '../historico-transferencia.service';
 import { HistoricoTransferencia } from '../historico-transferencia';
+import { CartaoCreditoService } from '../cartao-credito.service';
 
 @Component({
   selector: 'app-transferencia',
@@ -23,11 +24,13 @@ export class TransferenciaComponent implements OnInit {
   saldoDestinatario;
   saldoSolicitante;
   modelHistorico;
-
+  cartoes;
+  numeroCartao;
   constructor(private saldoService: SaldoService,
     private contaService: ContaService,
     private usuarioService: UsuarioService,
-    private historicoTransferenciaService: HistoricoTransferenciaService
+    private historicoTransferenciaService: HistoricoTransferenciaService,
+    private cartaoCreditoService: CartaoCreditoService
   ) { }
 
   ngOnInit() {
@@ -56,7 +59,6 @@ export class TransferenciaComponent implements OnInit {
         });
       }
     });
-
   }
 
   transferir() {
@@ -65,9 +67,25 @@ export class TransferenciaComponent implements OnInit {
       this.saldoSolicitante = dados[0].saldo;
       if (Number(this.valor) > Number(this.saldoSolicitante)) {
         let msg = "saldo insuficiente! \n saldo= " + this.saldoSolicitante + ", valor a ser transferido= " + this.valor;
-        msg += "\n Será utilizado o cartão de crédito."
-        alert(msg);
-        return;
+        this.cartaoCreditoService.listar(this.usuarioService.buscaIdUsuario())
+          .subscribe(
+            dados => {
+              this.cartoes = dados;
+              console.log(this.cartoes);
+              if (Object.keys(dados).length == 0) {
+                alert("não existe cartão! \n É necessário cadastrar um cartão!");
+                window.location = '/cartaoCredito';
+              } else {
+                msg += "\n Será utilizado o cartão de crédito."
+                alert(msg);
+
+                this.numeroCartao = this.cartoes[0].numeroCartao;
+                this.adicionaSaldoDestinatario();
+                this.salvaHistoricoTransferencia();
+                alert('transferencia efetuada!');
+              }
+            });
+
       } else if (Number(this.valor) > 1000) {
         let senha = prompt("Por favor digite a senha");
         if (senha == null) {
@@ -101,7 +119,8 @@ export class TransferenciaComponent implements OnInit {
       null,
       this.valor,
       this.dadosDestinatario[0].nome,
-      this.dadosContaDestinatario[0].numeroConta
+      this.dadosContaDestinatario[0].numeroConta,
+      this.numeroCartao
     );
     this.historicoTransferenciaService.criar(this.modelHistorico);
   }

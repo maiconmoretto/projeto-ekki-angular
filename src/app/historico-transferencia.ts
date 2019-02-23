@@ -6,6 +6,7 @@ export class HistoricoTransferencia {
         public dataCadastro: Date,
         public valor: string,
         public nomeDestinatario: string,
-        public numeroConta: string
+        public numeroConta: string,
+        public numeroCartao: string
     ){}
 }

@@ -7,12 +7,16 @@
       <th>Conta</th>
       <th>Data</th>
       <th>Valor</th>
+      <th>Forma de pagamento</th>
+      <th>Numero do Cartão</th>
     </tr>
-    <tr *ngFor="let historicoTransferencia of historicoTransferencias"> 
+    <tr *ngFor="let historicoTransferencia of historicoTransferencias">
       <td> {{historicoTransferencia.nomeDestinatario}} </td>
       <td> {{historicoTransferencia.numeroConta}} </td>
       <td> {{historicoTransferencia.dataCadastro}} </td>
       <td> R$ {{historicoTransferencia.valor}} </td>
+      <td> {{historicoTransferencia.numeroCartao ? 'cartão' : 'débito'}} </td>
+      <td>{{historicoTransferencia.numeroCartao}} </td>
     </tr>
   </table>
 </div>
