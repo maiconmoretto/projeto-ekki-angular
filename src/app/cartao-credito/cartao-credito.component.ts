@@ -13,7 +13,7 @@ export class CartaoCreditoComponent implements OnInit {
   constructor(
     private cartaoCreditoService: CartaoCreditoService,
     private usuarioService: UsuarioService
-    ) { }
+  ) { }
 
   validadeCartao;
   nomeUsuarioCartao;
@@ -48,15 +48,15 @@ export class CartaoCreditoComponent implements OnInit {
 
   salvar() {
     let id = document.getElementById("id").value;
-   
+
     if (id) {
       this.model = new CartaoCredito(
         id,
         this.usuarioService.buscaIdUsuario(),
-        document.getElementById('validadeCartao').value ,
-        document.getElementById('nomeUsuarioCartao').value ,
-        document.getElementById('numeroCartao').value ,
-        document.getElementById('codigoSeguranca').value 
+        document.getElementById('validadeCartao').value,
+        document.getElementById('nomeUsuarioCartao').value,
+        document.getElementById('numeroCartao').value,
+        document.getElementById('codigoSeguranca').value
       );
       this.cartaoCreditoService.atualizar(this.model);
       alert('Cartão autalizado com sucesso!');

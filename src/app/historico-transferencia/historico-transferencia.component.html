@@ -13,7 +13,14 @@
     <tr *ngFor="let historicoTransferencia of historicoTransferencias">
       <td> {{historicoTransferencia.nomeDestinatario}} </td>
       <td> {{historicoTransferencia.numeroConta}} </td>
-      <td> {{historicoTransferencia.dataCadastro}} </td>
+      <td> {{
+          historicoTransferencia.dataCadastro.substring(8, 10)
+          + '/' +
+          historicoTransferencia.dataCadastro.substring(5, 7)
+          + '/' +
+        historicoTransferencia.dataCadastro.substring(0, 4)
+      
+      }} </td>
       <td> R$ {{historicoTransferencia.valor}} </td>
       <td> {{historicoTransferencia.numeroCartao ? 'cartão' : 'débito'}} </td>
       <td>{{historicoTransferencia.numeroCartao}} </td>

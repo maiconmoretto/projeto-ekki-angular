@@ -12,8 +12,8 @@ import { TransferenciaComponent } from './transferencia/transferencia.component'
 import { HistoricoTransferenciaComponent } from './historico-transferencia/historico-transferencia.component';
 import { CartaoCreditoComponent } from './cartao-credito/cartao-credito.component';
 import { ContatoComponent } from './contato/contato.component';
-
-
+import { NgxCurrencyModule } from "ngx-currency";
+import { FormsModule } from '@angular/forms';
 
 
 const appRoutes: Routes = [
@@ -22,7 +22,7 @@ const appRoutes: Routes = [
   { path: 'cartaoCredito', component: CartaoCreditoComponent },
   { path: 'contato', component: ContatoComponent },
   { path: 'saldo', component: SaldosListagemComponent },
- ];
+];
 
 
 @NgModule({
@@ -36,12 +36,14 @@ const appRoutes: Routes = [
   ],
   imports: [
     RouterModule.forRoot(
-      appRoutes,
-    /*   { enableTracing: true } // <-- debugging purposes only */
+      appRoutes
+      /*   { enableTracing: true } // <-- debugging purposes only */
     ),
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxCurrencyModule,
+    FormsModule
   ],
   providers: [SaldoService],
   bootstrap: [AppComponent]

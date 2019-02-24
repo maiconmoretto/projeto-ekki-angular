@@ -7,6 +7,7 @@ import { HistoricoTransferenciaService } from '../historico-transferencia.servic
 import { HistoricoTransferencia } from '../historico-transferencia';
 import { CartaoCreditoService } from '../cartao-credito.service';
 
+
 @Component({
   selector: 'app-transferencia',
   templateUrl: './transferencia.component.html',
@@ -26,6 +27,8 @@ export class TransferenciaComponent implements OnInit {
   modelHistorico;
   cartoes;
   numeroCartao;
+  historicoTransferencias;
+
   constructor(private saldoService: SaldoService,
     private contaService: ContaService,
     private usuarioService: UsuarioService,
@@ -34,14 +37,17 @@ export class TransferenciaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
   }
+
+
 
   onContaKeyUp(event: any) {
     this.conta = event.target.value;
   }
 
   onValorKeyUp(event: any) {
-    this.valor = event.target.value;
+    this.valor = event;
   }
 
   buscaUsuarioPorConta() {
@@ -54,7 +60,7 @@ export class TransferenciaComponent implements OnInit {
         this.usuarioService.listarUsuarioPorId(this.dadosContaDestinatario[0].idUsuario).subscribe(dados => {
           this.dadosDestinatario = dados;
           if (Object.keys(dados).length == 0) {
-            alert('nao existe usuário com este id!');
+            alert('Não existe usuário com este id!');
           }
         });
       }
@@ -62,47 +68,81 @@ export class TransferenciaComponent implements OnInit {
   }
 
   transferir() {
+     let senhaIncorreta = false;
+    if (Number(this.valor) > 1000) {
+      let senha = prompt("Por favor digite a senha");
+      if (senha == null) {
+        alert('digite a senha!');
+        senhaIncorreta = true;
+        return;
+      }
+      if (senha != '123') {
+        senhaIncorreta = true;
+        alert('senha errada!');
+        return;
+      }
+    }
+    if (senhaIncorreta){
+      return false;
+    }
     this.saldoService.listar(this.usuarioService.buscaIdUsuario()).subscribe(dados => {
       this.saldoSolicitante = dados;
       this.saldoSolicitante = dados[0].saldo;
       if (Number(this.valor) > Number(this.saldoSolicitante)) {
-        let msg = "saldo insuficiente! \n saldo= " + this.saldoSolicitante + ", valor a ser transferido= " + this.valor;
+        let msg = "Saldo insuficiente! \n saldo atual= R$ " + this.saldoSolicitante + ", valor solicitado= R$ " + this.valor;
+        msg += "\n Para completar o valor da transação, será utilizado o cartão de crédito."
+        alert(msg);
         this.cartaoCreditoService.listar(this.usuarioService.buscaIdUsuario())
           .subscribe(
             dados => {
               this.cartoes = dados;
-              console.log(this.cartoes);
               if (Object.keys(dados).length == 0) {
-                alert("não existe cartão! \n É necessário cadastrar um cartão!");
+                alert("Não existe cartão cadastrado! \n É necessário cadastrar um cartão!");
                 window.location = '/cartaoCredito';
               } else {
-                msg += "\n Será utilizado o cartão de crédito."
-                alert(msg);
-
+                this.verifiacaTransferenciaDuplicada();
                 this.numeroCartao = this.cartoes[0].numeroCartao;
                 this.adicionaSaldoDestinatario();
                 this.salvaHistoricoTransferencia();
                 alert('transferencia efetuada!');
+                window.location.reload();
               }
             });
 
-      } else if (Number(this.valor) > 1000) {
-        let senha = prompt("Por favor digite a senha");
-        if (senha == null) {
-          alert('digite a senha!');
-          return;
-        }
-        if (senha != 123) {
-          alert('senha errada!');
-          return;
-        }
+      } else {
+        this.verifiacaTransferenciaDuplicada();
         this.removeSaldoSolicitante();
         this.adicionaSaldoDestinatario();
         this.salvaHistoricoTransferencia();
         alert('transferencia efetuada!');
+        window.location.reload();
       }
     })
 
+  }
+
+  verifiacaTransferenciaDuplicada() {
+    let self = this;
+    this.historicoTransferenciaService.listar(this.usuarioService.buscaIdUsuario())
+      .subscribe(dados => {
+        this.historicoTransferencias = dados;
+        Object.keys(dados).forEach(function (key) {
+          let dataCadastro = new Date(dados[key].dataCadastro),
+            dataCadastroLimite = new Date(dataCadastro);
+          dataCadastroLimite.setMinutes(dataCadastro.getMinutes() + 2);
+          let dataAtual = new Date();
+          let tempoLimite = dataCadastroLimite > dataAtual;
+
+          if (dados[key].idDestinatario == self.dadosDestinatario[0].id && dados[key].valor == self.valor
+            && tempoLimite) {
+            self.historicoTransferenciaService.deletar(dados[key].id);
+            let msg = "Já foi realizada uma transferência para esta conta com este valor";
+            msg += " e em menos de 2 minutos.\n";
+            msg += " A transferência anterior será cancelada e a atual será mantida.";
+            alert(msg);
+          }
+        });
+      });
   }
 
   removeSaldoSolicitante() {

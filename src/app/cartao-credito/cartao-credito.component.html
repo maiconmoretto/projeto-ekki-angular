@@ -1,6 +1,6 @@
 <div class="container" id="paddingGeral">
   <h1>Registro Cartão de Crédito</h1>
-  <input type="id" value="" id="id" hidden>
+  <input type="text" value="" id="id" hidden>
   <hr>
 
   <div class="form-group">
@@ -17,8 +17,9 @@
   </div>
   <div class="form-group">
     <label for="codigoSeguranca">Código de segurança</label>
-    <input (keyup)="onCodigoSegurancaKeyUp($event)" type="number" class="form-control" id="codigoSeguranca" required>
+    <input (keyup)="onCodigoSegurancaKeyUp($event)"   type="number"  class="form-control" id="codigoSeguranca" required>
   </div>
+
   <button type="button" class="btn btn-default" (click)="salvar()">salvar</button>
 
   <hr>

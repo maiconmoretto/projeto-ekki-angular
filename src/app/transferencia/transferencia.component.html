@@ -18,11 +18,13 @@
             <hr>
         </div>
 
-        <div class="form-group">
+
+        <div class="form-group ">
             <label for="valor">Valor</label>
-            <input (keyup)="onValorKeyUp($event)" type="text" class="form-control" id="valor">
+            <input currencyMask [(ngModel)]="valor" class="form-control" (ngModelChange)="onValorKeyUp($event)"
+                [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"  />
         </div>
 
         <button type="button" class="btn btn-default" (click)="transferir()">Transferir</button>
+
     </div>
-</div>

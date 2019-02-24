@@ -19,7 +19,13 @@ export class HistoricoTransferenciaService {
     return this.http.get(this.historicoTransferenciaUrl + '/' + idusuario);
   }
 
+  deletar(id) {
+    this.http.delete( this.historicoTransferenciaUrl + '/delete/' +id, httpOptions).subscribe(data=> console.log(data),err=>{console.log("error")})
+ 
+  }
+  
+
   criar(model: any) {
-    this.http.post( this.historicoTransferenciaUrl + '/create'  ,model, httpOptions).subscribe(data=> console.log(data),err=>{console.log("error")})
+    this.http.post(this.historicoTransferenciaUrl + '/create', model, httpOptions).subscribe(data => console.log(data), err => { console.log("error") })
   }
 }
